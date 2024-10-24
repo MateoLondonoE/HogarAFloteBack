@@ -1,0 +1,350 @@
+/* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: sans-serif;
+}
+
+/* Estilos Globales */
+body {
+  background-color: #99c2ec;
+  
+}
+
+/* Header */
+header {
+  background-color: #ffffff;
+  color: #030101;
+  padding: 10px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo img {
+  width: 120px;
+  margin-left: 20px;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  margin-right: 20px;
+}
+
+nav ul li {
+  margin-left: 20px;
+}
+
+nav ul li a {
+  color: #000000;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+/* Hero Section */
+.hero {
+  background-color: #99c2ec;
+  color: white;
+  padding: 200px 20px;
+  text-align: center;
+}
+
+.hero .content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.hero h1 {
+  font-size: 48px;
+  margin-bottom: 20px;
+}
+
+.hero h2 {
+  font-size: 45px;
+  margin-bottom: 20px;
+}
+
+.hero p {
+  font-size: 24px;
+  margin-bottom: 30px;
+}
+
+/* Footer */
+footer {
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  padding: 20px 0;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+footer p {
+  margin-top: 0.5rem;
+}
+
+footer a {
+  color: #9CC3E5;
+  text-decoration: none;
+}
+
+/* Estilos del Login */
+.login-container {
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 5px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  max-width: 400px;
+  margin: 50px auto;
+  width: 100%;
+}
+
+h1 {
+  color: #5A4033;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+h2 {
+  color: #5A4033;
+  margin-bottom: 1.5rem;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  text-align: left;
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+.recuperar-cancelar{
+  position: relative;
+  text-align: right;
+  text-shadow: none;
+  vertical-align: middle;
+  margin-bottom: 0.5rem;
+
+}
+
+.login-btn {
+  background-color: #5A4033;
+  color: #fff;
+  padding: 0.8rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  width: 100%;
+  text-align: center;
+  margin: 5px auto;
+}
+
+.recuperar-btn{
+  background-color: #79aad4;
+  color: #fff;
+  padding: 0.8rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  width: 50%;
+  text-align: right;
+  margin: 5px auto;
+  text-decoration: none;
+}
+
+.cancelar-btn{
+  background-color: #e0e3eb;
+  color: #000000;
+  padding: 0.8rem;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  width: 50%;
+  text-align: right;
+  margin: 5px auto;
+  text-decoration: none;
+  margin-right: 10px;
+}
+
+.crear-btn{
+  background-color: #79aad4;
+  color: #fff;
+  padding: 0.8rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  width: 50%;
+  text-align: center;
+  margin: 5px auto;
+  text-decoration: none;
+}
+
+/* Selección de Roles en el Login */
+.role-selection {
+  margin-bottom: 1.5rem;
+}
+
+.role-selection p {
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.role-selection label {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+/* Opciones Adicionales */
+.extra-options {
+  display: flex;
+  align-items: center;
+}
+
+.cuentaexist {
+  align-items: center;
+}
+
+.forgot-password {
+  display: block;
+  color: #5A4033;
+  text-decoration: none;
+  margin-bottom: 1.5rem;
+  margin-top: 1.2rem;
+}
+
+.ya-tiene-cuenta{
+  display: block;
+  text-align: center;
+  color: #5A4033;
+  text-decoration: none;
+  margin-bottom: 1rem;
+  margin-top: 1.2rem;
+}
+
+.raya{
+  align-items: center;
+  border-bottom: 1px solid #dadde1;
+  display: flex;
+  margin-top: 0.5rem;
+  margin-bottom: 1.5rem;
+  /*margin: 20px 10px;*/
+  text-align: center;
+}
+
+/*Formulario de registro*/
+.registro-container {
+  width: 400px;
+  margin: 35px auto;
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.contraseña-container{
+  width: 450px;
+  margin: 110px auto;
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  gap: 15px; /* Separación entre campos */
+}
+
+.form-group label {
+  flex: 1;
+  padding-right: 15px;
+  text-align: right;
+  padding-bottom: 10px;
+}
+
+#campo {
+  color: gray;
+  font-family: sans-serif;
+  font-size: 15px;
+}
+
+.form-group input {
+  flex: 2;
+  padding: 8px;
+  border: 1px solid #ccc;
+  background-color: white;
+  border-radius: 4px;
+} 
+
+.form-group select, #day, #month, #year {
+  width: 500%; /* Tamaño de los select de fecha */
+  padding: 10px;
+  border: 1px solid #ccc;
+  background-color: white;
+  border-radius: 5px;
+}
+
+.form-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+}
+
+.form-row select {
+  flex: 2;
+}
+
+.btn-container {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.btn-container button {
+  background-color: #79aad4;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.login-btn:hover {
+  background-color: #a68d8a;
+}
+
+.btn-container button:hover, .crear-btn:hover, .recuperar-btn:hover {
+  background-color: #649ed0;
+}
+
+.cancelar-btn:hover{
+  background-color: #ced3de;
+}
+
+.form-row.full-width {
+  flex: 1;
+}
+
+.radio-group, .radio-group-genero {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.radio-group label, .radio-group-genero label {
+  margin-right: 15px;
+}
