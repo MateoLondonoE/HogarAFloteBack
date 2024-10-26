@@ -16,7 +16,7 @@ export const registrarUsuario = async (req, res) => {
       email,
       usuario,
       password,
-      rol
+      rol,
     } = req.body;
 
     let tipo_usuario = 0;
@@ -51,8 +51,8 @@ export const registrarUsuario = async (req, res) => {
 
     console.log(result);
     res.json(result.rows);
-  } catch (err) {
-    console.error(err.message);
+  } catch (error) {
+    console.error(error.message);
     res.status(500).json({ message: error.message });
   }
 };
@@ -101,22 +101,21 @@ const fetchUsuarioById = async (id) => {
 export const deleteUsuarioById = async (req, res) => {
   try {
     const { id } = req.params;
-    const usuario = await fetchUsuarioById(id)
-    let nuevoEstado
-    if(usuario.estado === true){
-      nuevoEstado = "false"
+    const usuario = await fetchUsuarioById(id);
+    let nuevoEstado;
+    if (usuario.estado === true) {
+      nuevoEstado = "false";
+    } else {
+      nuevoEstado = "true";
     }
-    else{
-      nuevoEstado = "true"
-    }
-    
+
     const result = await pool.query(
       `UPDATE public."Usuario" SET estado = $2 WHERE id = $1`,
       [id, nuevoEstado]
     );
 
     if (result.rowCount > 0) {
-      res.status(200).send({ message: "Usuario cambió de estado con éxito" });
+      res.status(200).json({ message: "Usuario cambió de estado con éxito" });
     } else {
       res.status(404).json({ message: "Usuario no encontrado" });
     }
@@ -129,42 +128,30 @@ export const updateUsuario = async (req, res) => {
   try {
     const { id } = req.params;
     let {
-      primerNombre,
-      segundoNombre,
-      apellidos,
+      primer_nombre: primerNombre,
+      segundo_nombre: segundoNombre,
+      apellido: apellidos,
       genero,
       direccion,
       telefono,
-      password,
+      contraseña: password,
     } = req.body;
 
     const usuarioEncontrado = await fetchUsuarioById(id);
 
     if (!usuarioEncontrado) {
-      return res.status(404).json({ message: "Cliente no encontrado" });
+      return res.status(404).json({ message: "Usuario no encontrado" });
     }
 
-    if (!req.body.primer_nombre) {
-      primerNombre = usuarioEncontrado.primer_nombre;
-    }
-    if (!req.body.segundo_nombre) {
-      segundoNombre = usuarioEncontrado.segundo_nombre;
-    }
-    if (!req.body.apellido) {
-      apellidos = usuarioEncontrado.apellido;
-    }
-    if (!req.body.genero) {
-      genero = usuarioEncontrado.genero;
-    }
-    if (!req.body.direccion) {
-      direccion = usuarioEncontrado.direccion;
-    }
-    if (!req.body.telefono) {
-      telefono = usuarioEncontrado.telefono;
-    }
-    if (!req.body.password) {
-      password = usuarioEncontrado.password;
-    }
+    if (!primerNombre) primerNombre = usuarioEncontrado.primer_nombre;
+    if (!segundoNombre) segundoNombre = usuarioEncontrado.segundo_nombre;
+    if (!apellidos) apellidos = usuarioEncontrado.apellido;
+    if (!genero) genero = usuarioEncontrado.genero;
+    if (!direccion) direccion = usuarioEncontrado.direccion;
+    if (!telefono) telefono = usuarioEncontrado.telefono;
+    if (!password) password = usuarioEncontrado.contraseña;
+
+    console.log(primerNombre);
 
     const result = await pool.query(
       `UPDATE public."Usuario"
@@ -187,9 +174,13 @@ export const updateUsuario = async (req, res) => {
         id,
       ]
     );
-    res.status(200).json({ message: "Usuario actualizado con éxito" });
+
+    if (result.rowCount > 0) {
+      res.status(200).json({ message: "Usuario actualizado con éxito" });
+    }
   } catch (error) {
     console.error(error.message);
     res.status(500).json({ message: error.message });
   }
 };
+
