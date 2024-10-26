@@ -118,24 +118,22 @@ export const updateCita = async (req, res) => {
       return res.status(404).json({ message: "Cita no encontrada" });
     }
 
+    console.log(cita)
+
     console.log(year)
     console.log(month)
     console.log(day)
 
-    // Asigna valores por defecto si no se proporcionaron en el cuerpo de la solicitud
+    // Asigna valores por defecto de la anterior cita si no se proporcionan en la solicitud
     if (!descripcion) descripcion = cita.descripcion;
     if (!precio) precio = cita.precio;
-    if (!year) year = cita.year;
-    if (!month) month = cita.month;
-    if (!day) day = cita.day;
+    if (!year || !month || !day) {
+      const fecha = new Date(cita.fecha);
+      if (!year) year = fecha.getFullYear();
+      if (!month) month = fecha.getMonth() + 1; // getMonth() devuelve un índice de 0 a 11, por eso sumamos 1
+      if (!day) day = fecha.getDate();
+    }
     if (!ubicacion) ubicacion = cita.ubicacion;
-
-    // // Verificar que year, month, y day tengan valores válidos
-    // if (!year || !month || !day) {
-    //   return res
-    //     .status(400)
-    //     .json({ message: "La fecha es inválida o incompleta." });
-    // }
 
     console.log(year)
     console.log(month)
