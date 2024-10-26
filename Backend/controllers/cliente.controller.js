@@ -118,12 +118,6 @@ export const updateCita = async (req, res) => {
       return res.status(404).json({ message: "Cita no encontrada" });
     }
 
-    console.log(cita)
-
-    console.log(year)
-    console.log(month)
-    console.log(day)
-
     // Asigna valores por defecto de la anterior cita si no se proporcionan en la solicitud
     if (!descripcion) descripcion = cita.descripcion;
     if (!precio) precio = cita.precio;
@@ -134,10 +128,6 @@ export const updateCita = async (req, res) => {
       if (!day) day = fecha.getDate();
     }
     if (!ubicacion) ubicacion = cita.ubicacion;
-
-    console.log(year)
-    console.log(month)
-    console.log(day)
 
     const result = await pool.query(
       `UPDATE public."Cita" 
