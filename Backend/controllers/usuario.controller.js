@@ -184,3 +184,23 @@ export const updateUsuario = async (req, res) => {
   }
 };
 
+export const loginUsuario = async (req, res) => {
+  try {
+    const { usuario, contraseña } = req.body;
+
+    const result = await pool.query(
+      `SELECT "contraseña" FROM public."Usuario" WHERE usuario = $1`,
+      [usuario]
+    );
+
+    let contraseñaDB = result.rows[0].contraseña;
+
+    if (contraseña === contraseñaDB) {
+      res.status(200).json(true);
+    } else {
+      res.status(401).json(false);
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
