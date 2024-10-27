@@ -66,7 +66,7 @@ export const getCitaById = async (req, res) => {
 export const fetchCitaById = async (id) => {
   try {
     const result = await pool.query(
-      `SELECT * FROM public."Cita" WHERE id_usuario = $1`,
+      `SELECT * FROM public."Cita" WHERE id = $1`,
       [id]
     );
 
@@ -86,7 +86,7 @@ export const deleteCita = async (req, res) => {
     const cita = await fetchCitaById(id);
 
     let nuevoEstado;
-    if (nuevoEstado === true) {
+    if (cita.estado === true) {
       nuevoEstado = "false";
     } else {
       nuevoEstado = "true";

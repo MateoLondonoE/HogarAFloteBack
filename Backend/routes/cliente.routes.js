@@ -3,10 +3,10 @@ import { deleteCita, getAllCitas, getCitaById, newCita, updateCita } from "../co
 
 const router = Router()
 
-router.post("/", newCita)
-router.get("/:id", getAllCitas)
+router.post("/cita", newCita)
+router.get("/citas/:id", getAllCitas)
 router.get("/cita/:id", getCitaById)
-router.delete("/:id", deleteCita)
-router.put("/:id", updateCita)
+router.delete("/cita/:id", deleteCita)
+router.put("/cita/:id", updateCita)
 
 export default router;
