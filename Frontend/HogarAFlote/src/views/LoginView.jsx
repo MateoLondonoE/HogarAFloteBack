@@ -1,22 +1,42 @@
-import React from 'react';
-import PaginaPrincipalView from "./PaginaPrincipalView"
+//import React from 'react';
+import { useState } from 'react';
+import axios from 'axios';
 import HeaderPP from './headerView';
 import FooterPP from './footerView';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 function Login(){
+    const [usuario, setUsuario] = useState('');
+  const [contraseña, setContraseña] = useState('');
+  const navigate = useNavigate();
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post('/api/login', { usuario, contraseña });
+      if (response.data.token) {
+        localStorage.setItem('token', response.data.token); // Guarda el token
+        navigate('/pp'); // Redirige a la página principal
+      }
+    } catch (error) {
+      console.error('Error de inicio de sesión:', error);
+    }
+  };
+
+
     return(
         <>
         <HeaderPP/>
         <main>
             <div className="login-container">
                 <h1>Inicio Sesión</h1>
-                <form className="login-form">
+                <form className="login-form" onSubmit={handleLogin}>
                     <div className="form-group full-width">
-                        <input type="email" id="email" placeholder="Correo Electrónico" />
+                        <input type="text" placeholder="Usuario" value={usuario} onChange={(e) => setUsuario(e.target.value)} />
                     </div>
                     <div className="form-group full-width">
-                        <input type="password" id="password" placeholder="Contraseña" />
+                        <input type="password" placeholder="Contraseña" value={contraseña} onChange={(e) => setContraseña(e.target.value)} />
                     </div>
                     <div className="radio-group-genero">
                         <label><input type="radio" name="genero" value="hombre" /> Cliente</label>

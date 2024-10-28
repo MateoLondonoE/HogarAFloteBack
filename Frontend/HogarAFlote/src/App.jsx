@@ -1,23 +1,27 @@
-import React from 'react';
+//import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import HeaderPP from './views/headerView';
+import FooterPP from './views/footerView';
 import PaginaPrincipalView from './views/PaginaPrincipalView';
 import LoginView from './views/LoginView';
 import OlvidastetuCuenta from './views/OlvidastetuCuentaView';
 import Registro from './views/RegistroView';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 function App() {
   return (
     <Router>
-      <Routes>
-      <Route path="/" element={<PaginaPrincipalView />} />
-        <Route path="/pp" element={<PaginaPrincipalView />} />
-        <Route path="/login" element={<LoginView />} />
-        <Route path="/ot" element={<OlvidastetuCuenta />} />
-        <Route path="/reg" element={<Registro />} />
-      </Routes>
+      <HeaderPP />
+      <div style={{ minHeight: '80vh' }}> {/* Asegura que el contenido tenga espacio y el footer esté al final */}
+        <Routes>
+          <Route path="/" element={<PaginaPrincipalView />} />
+          <Route path="/pp" element={<PaginaPrincipalView />} />
+          <Route path="/login" element={<LoginView />} />
+          <Route path="/ot" element={<OlvidastetuCuenta />} />
+          <Route path="/reg" element={<Registro />} />
+        </Routes>
+      </div>
+      <FooterPP />
     </Router>
-        
-      
   );
 }
 

@@ -1,6 +1,5 @@
-import React from 'react';
+//import React from 'react';
 import logo from '../assets/logo.png'
-import PaginaPrincipal from './PaginaPrincipalView';
 import { Link } from 'react-router-dom';
 
 function HeaderPP(){
