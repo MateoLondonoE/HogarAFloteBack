@@ -3,11 +3,13 @@ import HeaderPP from './headerView';
 import FooterPP from './footerView';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 function Registro() {
+  const navigate = useNavigate();
   // Estado para almacenar los valores del formulario
   const [formData, setFormData] = useState({
-    cedula: '',
+    identificacion: '',
     primerNombre: '',
     segundoNombre: '',
     apellidos: '',
@@ -34,25 +36,17 @@ function Registro() {
     });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault(); // Prevenir el envío del formulario
-    axios.post("http://localhost:3000/api/v1/cliente", {
-      identificacion: formData.identificacion,
-      primerNombre: formData.primerNombre,
-      segundoNombre: formData.segundoNombre,
-      apellidos: formData.apellidos,
-      year: formData.year,
-      month: formData.month,
-      day: formData.day,
-      genero: formData.genero,
-      direccion: formData.direccion,
-      telefono: formData.telefono,
-      email: formData.email,
-      usuario: formData.usuario,
-      password: formData.password,
-      rol: formData.rol
-    })
-    console.log(formData); // Aquí puedes enviar los datos a tu backend
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post("http://localhost:3000/api/v1/usuario/", formData);
+      setMensaje(response.data.message);
+      e.target.reset();
+      navigate('/login'); // Redirige a la página principal
+    } catch (error) {
+      setMensaje("Error en el registro. Inténtelo de nuevo."
+      );
+    }
   };
 
   useEffect(() => {
@@ -69,7 +63,6 @@ function Registro() {
 
   return (
     <>
-      <HeaderPP />
       <main>
         <div className="registro-container">
           <h1>Crea una cuenta</h1>
@@ -77,9 +70,9 @@ function Registro() {
             <div className="form-group">
               <input
                 type="text"
-                name="cedula"
+                name="identificacion"
                 placeholder="# Cédula"
-                value={formData.cedula}
+                value={formData.identificacion}
                 onChange={handleChange}
               />
               <input
@@ -272,7 +265,6 @@ function Registro() {
           </form>
         </div>
       </main>
-      <FooterPP />
     </>
   );
 }

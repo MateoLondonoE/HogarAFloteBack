@@ -1,4 +1,6 @@
 import { pool } from "../db.js";
+import bcrypt from 'bcrypt';
+
 
 export const registrarUsuario = async (req, res) => {
   try {
@@ -15,22 +17,51 @@ export const registrarUsuario = async (req, res) => {
       telefono,
       email,
       usuario,
-      password,
-      rol,
+      rol
     } = req.body;
 
+    let password="";
     let tipo_usuario = 0;
+    let estado = false;
+    let generoIngreso=""
+
+    if (genero === "mujer") {
+      generoIngreso = 1;
+    } else {
+      generoIngreso = 2;
+    }
+
     if (rol === "cliente") {
       tipo_usuario = 1;
+      estado=true;
     } else {
       tipo_usuario = 2;
+      estado=false;
     }
+
+     // Verificar si el usuario ya existe
+     const emailExists = await pool.query('SELECT * FROM public."Usuario" WHERE email = $1', [email]);
+     if (emailExists.rows.length > 0) {
+         return res.status(400).json({ message: 'El usuario ya existe. Por favor, intente con otro correo.' });
+     }
+
+     // Verificar si el usuario ya existe
+     const userExists = await pool.query('SELECT * FROM public."Usuario" WHERE identificacion = $1', [identificacion]);
+     if (userExists.rows.length > 0) {
+         return res.status(400).json({ message: 'El usuario ya existe, intente con otra identificación' });
+     }
+
+    
+    password = await bcrypt.hash(password, 10);
+      
 
     const result = await pool.query(
       `
-            INSERT INTO public."Usuario"(
-                usuario, "contraseña", tipo_usuario, primer_nombre, segundo_nombre, apellido, direccion, telefono, email, identificacion, fecha_nacimiento, genero)
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, TO_DATE($11 || '-' || $12 || '-' || $13, 'YYYY-MM-DD'), $14)`,
+            INSERT INTO public."Usuario" (
+              usuario, "contraseña", tipo_usuario, primer_nombre, segundo_nombre, apellido,
+              direccion, telefono, email, identificacion, fecha_nacimiento, genero, estado
+            )
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, TO_DATE($11 || '-' || $12 || '-' || $13, 'YYYY-MM-DD'), $14, $15)`,
       [
         usuario,
         password,
@@ -45,15 +76,16 @@ export const registrarUsuario = async (req, res) => {
         year,
         month,
         day,
-        genero,
+        generoIngreso,
+        estado,
       ]
     );
 
     console.log(result);
-    res.json(result.rows);
+    res.status(201).json({ message: 'Usuario registrado exitosamente.', user: result.rows[0] });
   } catch (error) {
     console.error(error.message);
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: 'Error al registrar usuario. Inténtelo nuevamente más tarde.' });
   }
 };
 

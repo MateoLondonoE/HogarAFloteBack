@@ -6,6 +6,7 @@ import PaginaPrincipalView from './views/PaginaPrincipalView';
 import LoginView from './views/LoginView';
 import OlvidastetuCuenta from './views/OlvidastetuCuentaView';
 import Registro from './views/RegistroView';
+import Admin from './views/Admin';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="/login" element={<LoginView />} />
           <Route path="/ot" element={<OlvidastetuCuenta />} />
           <Route path="/reg" element={<Registro />} />
+          <Route path="/adm" element={<Admin />} />
         </Routes>
       </div>
       <FooterPP />

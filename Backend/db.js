@@ -6,7 +6,7 @@ export const pool = new Pool({
     user: 'postgres',
     host: 'localhost',
     database: 'HogarDB',
-    password: '1234',
+    password: '123456789',
     port: 5432,
 });
 

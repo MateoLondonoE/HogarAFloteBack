@@ -7,17 +7,17 @@ import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
 function Login(){
-    const [usuario, setUsuario] = useState('');
+  const [usuario, setUsuario] = useState('');
   const [contraseña, setContraseña] = useState('');
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/api/login', { usuario, contraseña });
+      const response = await axios.post('http://localhost:3000/api/v1/login/', { usuario, contraseña });
       if (response.data.token) {
         localStorage.setItem('token', response.data.token); // Guarda el token
-        navigate('/pp'); // Redirige a la página principal
+        navigate('/adm'); // Redirige a la página principal
       }
     } catch (error) {
       console.error('Error de inicio de sesión:', error);
@@ -27,7 +27,6 @@ function Login(){
 
     return(
         <>
-        <HeaderPP/>
         <main>
             <div className="login-container">
                 <h1>Inicio Sesión</h1>
@@ -38,11 +37,11 @@ function Login(){
                     <div className="form-group full-width">
                         <input type="password" placeholder="Contraseña" value={contraseña} onChange={(e) => setContraseña(e.target.value)} />
                     </div>
-                    <div className="radio-group-genero">
+                    {/* <div className="radio-group-genero">
                         <label><input type="radio" name="genero" value="hombre" /> Cliente</label>
                         <label><input type="radio" name="genero" value="mujer" /> Proveedor</label>
                         <label><input type="radio" name="genero" value="otro" /> Administrador</label>
-                    </div>
+                    </div> */}
                     
                     <div className="extra-options">
                         <button className="login-btn" type="submit">Iniciar sesión</button>
@@ -57,7 +56,6 @@ function Login(){
                 </form>
             </div>        
         </main>
-        <FooterPP/>
         </>
     )
 }

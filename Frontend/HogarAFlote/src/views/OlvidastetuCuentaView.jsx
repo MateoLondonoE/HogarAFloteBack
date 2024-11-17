@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom';
 function OlvidastetuCuenta(){
     return(
         <>
-        <HeaderPP/>
         <main>
             <div className="contraseña-container">
                 <h2>Recupera tu contraseña</h2>
@@ -25,7 +24,6 @@ function OlvidastetuCuenta(){
                 </form>
             </div>        
         </main>
-        <FooterPP/>
         </>
     )
 }
