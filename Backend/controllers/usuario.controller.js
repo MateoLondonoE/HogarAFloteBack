@@ -5,32 +5,18 @@ import bcrypt from 'bcrypt';
 export const registrarUsuario = async (req, res) => {
   try {
     const {
-      identificacion,
-      primerNombre,
-      segundoNombre,
-      apellidos,
-      year,
-      month,
-      day,
-      genero,
-      direccion,
-      telefono,
-      email,
-      usuario,
-      rol
+      identificacion,nombres,tipo_documento,apellidos,year,month,day,genero,direccion,telefono,email,usuario,rol,portafolio
     } = req.body;
 
+    // Declaración de variables para respectivas validaciones
     let password="";
     let tipo_usuario = 0;
     let estado = false;
-    let generoIngreso=""
 
-    if (genero === "mujer") {
-      generoIngreso = 1;
-    } else {
-      generoIngreso = 2;
-    }
+    // Validación con género
+    const generoIngreso = genero === "mujer" ? 1 : 2;
 
+    //Validacion con cliente
     if (rol === "cliente") {
       tipo_usuario = 1;
       estado=true;
@@ -39,36 +25,43 @@ export const registrarUsuario = async (req, res) => {
       estado=false;
     }
 
-     // Verificar si el usuario ya existe
+    // Verificar si la identificación ya existe
+    const idExists = await pool.query('SELECT * FROM public."Usuario" WHERE identificacion = $1', [identificacion]);
+     if (idExists.rows.length > 0) {
+        console.log('Identificación ya registrada con otra cuenta, intente realizar el registro con otra')
+        return res.status(400).json({ message: 'Identificación ya registrada con otra cuenta' });
+     }
+
+     // Verificar si el correo ya existe
      const emailExists = await pool.query('SELECT * FROM public."Usuario" WHERE email = $1', [email]);
      if (emailExists.rows.length > 0) {
-         return res.status(400).json({ message: 'El usuario ya existe. Por favor, intente con otro correo.' });
+        console.log('Correo ya esta registrado con otra cuenta, intente realizar el registro con otra')
+        return res.status(400).json({ message: 'Correo ya esta registrado con otra cuenta' });
      }
-
      // Verificar si el usuario ya existe
-     const userExists = await pool.query('SELECT * FROM public."Usuario" WHERE identificacion = $1', [identificacion]);
+     const userExists = await pool.query('SELECT * FROM public."Usuario" WHERE usuario = $1', [usuario]);
      if (userExists.rows.length > 0) {
-         return res.status(400).json({ message: 'El usuario ya existe, intente con otra identificación' });
+        console.log('Nombre de usuario ya registrado con otra cuenta, intente realizar el registro con otra')
+        return res.status(400).json({ message: 'Nombre de usuario ya registrado con otra cuenta' });
      }
 
-    
     password = await bcrypt.hash(password, 10);
       
 
     const result = await pool.query(
       `
             INSERT INTO public."Usuario" (
-              usuario, "contraseña", tipo_usuario, primer_nombre, segundo_nombre, apellido,
-              direccion, telefono, email, identificacion, fecha_nacimiento, genero, estado
+              usuario, "contraseña", tipo_usuario, nombres, apellidos, tipo_documento,
+              direccion, telefono, email, identificacion, fecha_nacimiento, genero, estado, imagen
             )
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, TO_DATE($11 || '-' || $12 || '-' || $13, 'YYYY-MM-DD'), $14, $15)`,
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, TO_DATE($11 || '-' || $12 || '-' || $13, 'YYYY-MM-DD'), $14, $15, $16)`,
       [
         usuario,
         password,
         tipo_usuario,
-        primerNombre,
-        segundoNombre,
+        nombres,
         apellidos,
+        tipo_documento,
         direccion,
         telefono,
         email,
@@ -78,11 +71,11 @@ export const registrarUsuario = async (req, res) => {
         day,
         generoIngreso,
         estado,
+        portafolio,
       ]
     );
-
-    console.log(result);
     res.status(201).json({ message: 'Usuario registrado exitosamente.', user: result.rows[0] });
+    console.log('Usuario registrado exitosamente.');
   } catch (error) {
     console.error(error.message);
     res.status(500).json({ message: 'Error al registrar usuario. Inténtelo nuevamente más tarde.' });
