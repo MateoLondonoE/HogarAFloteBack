@@ -138,12 +138,13 @@ function Registro() {
 
     return Object.keys(nuevosErrores).length === 0; // Devuelve true si no hay errores
 };
+
 const handleSubmit = async (e) => {
   e.preventDefault();
-
   if (!validarFormulario()) return;
 
   try {
+    
     const response = await axios.post("http://localhost:3000/api/v1/usuario/", formData);
 
     // Si la respuesta es exitosa, restablecemos errores y redirigimos
