@@ -1,15 +1,14 @@
 import { pool } from "../db.js";
 import bcrypt from 'bcrypt';
 
-
 export const registrarUsuario = async (req, res) => {
   try {
     const {
-      identificacion,nombres,tipo_documento,apellidos,year,month,day,genero,direccion,telefono,email,usuario,rol,portafolio
+      identificacion,password,nombres,tipo_documento,apellidos,year,month,day,genero,direccion,telefono,email,usuario,rol,portafolio
     } = req.body;
 
     // Declaración de variables para respectivas validaciones
-    let password="";
+    let passwordBD="";
     let tipo_usuario = 0;
     let estado = false;
 
@@ -44,9 +43,9 @@ export const registrarUsuario = async (req, res) => {
         console.log('Nombre de usuario ya registrado con otra cuenta, intente realizar el registro con otra')
         return res.status(400).json({ message: 'Nombre de usuario ya registrado con otra cuenta' });
      }
-
-    password = await bcrypt.hash(password, 10);
-      
+    console.log(password)
+    passwordBD = await bcrypt.hash(password, 10);
+    console.log(passwordBD)
 
     const result = await pool.query(
       `
@@ -57,7 +56,7 @@ export const registrarUsuario = async (req, res) => {
             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, TO_DATE($11 || '-' || $12 || '-' || $13, 'YYYY-MM-DD'), $14, $15, $16)`,
       [
         usuario,
-        password,
+        passwordBD,
         tipo_usuario,
         nombres,
         apellidos,
@@ -84,7 +83,7 @@ export const registrarUsuario = async (req, res) => {
 
 export const getAllUsuarios = async (req, res) => {
   try {
-    const result = await pool.query(`SELECT * FROM public."Usuario"`);
+    const result = await pool.query(`SELECT nombres || ' ' || apellidos as "Nombres",email,imagen FROM public."Usuario" where tipo_usuario=2 and estado='false'`);
 
     res.status(200).json(result.rows);
   } catch (error) {
@@ -106,6 +105,7 @@ export const getUsuarioById = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
 const fetchUsuarioById = async (id) => {
   try {
     const result = await pool.query(
@@ -209,23 +209,41 @@ export const updateUsuario = async (req, res) => {
   }
 };
 
+
 export const loginUsuario = async (req, res) => {
   try {
     const { usuario, contraseña } = req.body;
 
+    // Verifica si el usuario existe en la base de datos
     const result = await pool.query(
-      `SELECT "contraseña" FROM public."Usuario" WHERE usuario = $1`,
+      `SELECT "contraseña" FROM public."Usuario" WHERE usuario = $1 AND estado = 'true'`,
       [usuario]
     );
 
-    let contraseñaDB = result.rows[0].contraseña;
+    if (result.rowCount === 0) {
+      return res.status(401).json({ message: 'Usuario no existe' });
+    }
 
-    if (contraseña === contraseñaDB) {
-      res.status(200).json(true);
+    const contraseñaDB = result.rows[0].contraseña;
+
+    console.log(contraseña)
+    console.log(contraseñaDB)
+
+    // Compara la contraseña ingresada con la encriptada
+    const esValida = await bcrypt.compare(contraseña, contraseñaDB);
+    console.log(esValida)
+
+    if (esValida) {
+      // Generar un token (opcional, por ejemplo con JWT)
+      const token = "falso-token"; // Cambia esto por JWT si necesitas autenticación basada en token
+
+      return res.status(200).json({ message: 'Inicio de sesión exitoso', token });
     } else {
-      res.status(401).json(false);
+      return res.status(401).json({ message: 'Contraseña incorrecta' });
     }
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Error en loginUsuario:', error.message);
+    return res.status(500).json({ message: 'Error interno del servidor' });
   }
 };
+
